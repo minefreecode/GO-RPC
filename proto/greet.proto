@@ -1,0 +1,46 @@
+syntax="proto3";
+
+option go_package = "./proto";
+
+
+package greet_service;
+
+service GreetService {
+  //Запрос и ответ
+  rpc SayHello (NoParam) returns (HelloResponse);
+
+  //Серверная потоковая передача — клиент отправляет запрос и получает поток ответа
+  rpc SayHelloServerStreaming (NamesList) returns (stream HelloResponse);
+
+  //Клиентская потоковая передача — клиент отправляет поток запросов и получает ответ
+  rpc SayHelloClientStreaming (stream HelloRequest) returns (MessagesList);
+
+  //Двунаправленный — клиент и сервер общаются друг с другом с помощью потока
+  rpc SayHelloBidirectionalStreaming (stream HelloRequest) returns (stream HelloResponse);
+}
+
+//Сообщение без параметров
+message NoParam{}
+
+// Сообщение необходимое для запроса
+message HelloRequest {
+  string name = 1;
+}
+
+// Сообщение необходимое для ответа
+message HelloResponse {
+  string message = 1;
+}
+
+// Сообщение в виде массива
+message NamesList {
+  repeated string names = 1; //массив имен
+}
+
+// Список сообщений
+message MessagesList {
+  repeated string messages = 1; //Массив сообщений
+}
+
+
+
