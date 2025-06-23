@@ -56,6 +56,27 @@ func (s *helloServer) SayHelloClientStreaming(stream pb.GreetService_SayHelloCli
 	}
 }
 
+func (s *helloServer) SayHelloBidirectionalStreaming(stream pb.GreetService_SayHelloBidirectionalStreamingServer) error {
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return err
+		}
+		log.Printf("Получен запрос с именем: %v", req.Name)
+		res := &pb.HelloResponse{
+			Message: "Hello" + req.Name,
+		}
+		log.Printf("Отправка сообщения с именем: %v", res.Message)
+		if err := stream.Send(res); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func main() {
 	lis, err := net.Listen("tcp", port)
 	if err != nil {

@@ -69,6 +69,44 @@ func callSayHelloClientStream(client pb.GreetServiceClient, names *pb.NamesList)
 	log.Printf("%v", res.Messages)
 }
 
+func callSayHelloBidirectionalStream(client pb.GreetServiceClient, names *pb.NamesList) {
+	log.Printf("Двухсторонний стримиинг начат")
+	stream, err := client.SayHelloBidirectionalStreaming(context.Background())
+	if err != nil {
+		log.Fatalf("Нельзя стартовать двухсторонний стримминг: %v", err)
+	}
+	waitc := make(chan struct{})
+
+	go func() {
+		for {
+			message, err := stream.Recv()
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				log.Fatalf("Ошибка при стримминге: %v", err)
+			}
+			log.Println(message)
+		}
+		close(waitc)
+	}()
+
+	for _, name := range names.Names {
+		req := &pb.HelloRequest{
+			Name: name,
+		}
+		if err := stream.Send(req); err != nil {
+			log.Fatalf("Ошибка при отправке: %v", err)
+		}
+		time.Sleep(2 * time.Second)
+	}
+
+	stream.CloseSend()
+	<-waitc
+	log.Println("Двухсторонний стримминг закончен")
+
+}
+
 func main() {
 	conn, err := grpc.Dial("localhost"+port, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
