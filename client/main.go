@@ -15,20 +15,20 @@ const (
 )
 
 // Вызов приветствия
-func callSayHello(client pb.GreetServiceClient) {
+func callSayGreeting(client pb.GreetServiceClient) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel() // Отмена в конце
 
-	res, err := client.SayHello(ctx, &pb.NoPram{})
+	res, err := client.SayGreeting(ctx, &pb.NoPram{})
 	if err != nil {
 		log.Fatalf("Невозможно приветствовать: %v", err)
 	}
 	log.Println(res.Message)
 }
 
-func callSayHelloServerStream(client pb.GreetServiceClient, names *pb.NamesList) {
+func callSayGreetingServerStream(client pb.GreetServiceClient, names *pb.NamesList) {
 	log.Printf("Стартован сервер потока")
-	stream, err := client.SayHelloServerStreaming(context.Background(), names)
+	stream, err := client.SayGreetingServerStreaming(context.Background(), names)
 	if err != nil {
 		log.Fatalf("Нельзя отправлять имена: %v", err)
 	}
@@ -45,14 +45,14 @@ func callSayHelloServerStream(client pb.GreetServiceClient, names *pb.NamesList)
 	log.Println("Поток закончен")
 }
 
-func callSayHelloClientStream(client pb.GreetServiceClient, names *pb.NamesList) {
+func callSayGreetingClientStream(client pb.GreetServiceClient, names *pb.NamesList) {
 	log.Printf("Клиентский стримминг начат")
-	stream, err := client.SayHelloClientStreaming(context.Background())
+	stream, err := client.SayGreetingClientStreaming(context.Background())
 	if err != nil {
 		log.Fatalf("Нельзя стартовать клиентский стримминг: %v", err)
 	}
 	for _, name := range names.Names {
-		req := &pb.HelloRequest{
+		req := &pb.GreetingRequest{
 			Name: name,
 		}
 		if err := stream.Send(req); err != nil {
@@ -69,9 +69,9 @@ func callSayHelloClientStream(client pb.GreetServiceClient, names *pb.NamesList)
 	log.Printf("%v", res.Messages)
 }
 
-func callSayHelloBidirectionalStream(client pb.GreetServiceClient, names *pb.NamesList) {
+func callSayGreetingBidirectionalStream(client pb.GreetServiceClient, names *pb.NamesList) {
 	log.Printf("Двухсторонний стримиинг начат")
-	stream, err := client.SayHelloBidirectionalStreaming(context.Background())
+	stream, err := client.SayGreetingBidirectionalStreaming(context.Background())
 	if err != nil {
 		log.Fatalf("Нельзя стартовать двухсторонний стримминг: %v", err)
 	}
@@ -92,7 +92,7 @@ func callSayHelloBidirectionalStream(client pb.GreetServiceClient, names *pb.Nam
 	}()
 
 	for _, name := range names.Names {
-		req := &pb.HelloRequest{
+		req := &pb.GreetingRequest{
 			Name: name,
 		}
 		if err := stream.Send(req); err != nil {
@@ -120,7 +120,7 @@ func main() {
 		Names: []string{"Alice", "Bob", "King"},
 	}
 
-	//callSayHello(client)
-	// callSayHelloServerStream(client, names)
-	callSayHelloClientStream(client, names)
+	//callSayGreeting(client)
+	// callSayGreetingServerStream(client, names)
+	callSayGreetingClientStream(client, names)
 }

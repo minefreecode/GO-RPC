@@ -58,7 +58,7 @@ func (*NoPram) Descriptor() ([]byte, []int) {
 	return file_proto_greet_proto_rawDescGZIP(), []int{0}
 }
 
-type HelloRequest struct {
+type GreetingRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -66,8 +66,8 @@ type HelloRequest struct {
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 }
 
-func (x *HelloRequest) Reset() {
-	*x = HelloRequest{}
+func (x *GreetingRequest) Reset() {
+	*x = GreetingRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_proto_greet_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -75,13 +75,13 @@ func (x *HelloRequest) Reset() {
 	}
 }
 
-func (x *HelloRequest) String() string {
+func (x *GreetingRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*HelloRequest) ProtoMessage() {}
+func (*GreetingRequest) ProtoMessage() {}
 
-func (x *HelloRequest) ProtoReflect() protoreflect.Message {
+func (x *GreetingRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_greet_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -93,19 +93,19 @@ func (x *HelloRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use HelloRequest.ProtoReflect.Descriptor instead.
-func (*HelloRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use GreetingRequest.ProtoReflect.Descriptor instead.
+func (*GreetingRequest) Descriptor() ([]byte, []int) {
 	return file_proto_greet_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *HelloRequest) GetName() string {
+func (x *GreetingRequest) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-type HelloResponse struct {
+type GreetingResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -113,8 +113,8 @@ type HelloResponse struct {
 	Message string `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
 }
 
-func (x *HelloResponse) Reset() {
-	*x = HelloResponse{}
+func (x *GreetingResponse) Reset() {
+	*x = GreetingResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_proto_greet_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -122,13 +122,13 @@ func (x *HelloResponse) Reset() {
 	}
 }
 
-func (x *HelloResponse) String() string {
+func (x *GreetingResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*HelloResponse) ProtoMessage() {}
+func (*GreetingResponse) ProtoMessage() {}
 
-func (x *HelloResponse) ProtoReflect() protoreflect.Message {
+func (x *GreetingResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_greet_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -140,12 +140,12 @@ func (x *HelloResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use HelloResponse.ProtoReflect.Descriptor instead.
-func (*HelloResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use GreetingResponse.ProtoReflect.Descriptor instead.
+func (*GreetingResponse) Descriptor() ([]byte, []int) {
 	return file_proto_greet_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *HelloResponse) GetMessage() string {
+func (x *GreetingResponse) GetMessage() string {
 	if x != nil {
 		return x.Message
 	}
@@ -301,21 +301,21 @@ func file_proto_greet_proto_rawDescGZIP() []byte {
 
 var file_proto_greet_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_proto_greet_proto_goTypes = []interface{}{
-	(*NoPram)(nil),        // 0: greet_service.NoPram
-	(*HelloRequest)(nil),  // 1: greet_service.HelloRequest
-	(*HelloResponse)(nil), // 2: greet_service.HelloResponse
-	(*NamesList)(nil),     // 3: greet_service.NamesList
-	(*MessagesList)(nil),  // 4: greet_service.MessagesList
+	(*NoPram)(nil),           // 0: greet_service.NoPram
+	(*GreetingRequest)(nil),  // 1: greet_service.GreetingRequest
+	(*GreetingResponse)(nil), // 2: greet_service.GreetingResponse
+	(*NamesList)(nil),        // 3: greet_service.NamesList
+	(*MessagesList)(nil),     // 4: greet_service.MessagesList
 }
 var file_proto_greet_proto_depIdxs = []int32{
-	0, // 0: greet_service.GreetService.SayHello:input_type -> greet_service.NoPram
-	3, // 1: greet_service.GreetService.SayHelloServerStreaming:input_type -> greet_service.NamesList
-	1, // 2: greet_service.GreetService.SayHelloClientStreaming:input_type -> greet_service.HelloRequest
-	1, // 3: greet_service.GreetService.SayHelloBidirectionalStreaming:input_type -> greet_service.HelloRequest
-	2, // 4: greet_service.GreetService.SayHello:output_type -> greet_service.HelloResponse
-	2, // 5: greet_service.GreetService.SayHelloServerStreaming:output_type -> greet_service.HelloResponse
-	4, // 6: greet_service.GreetService.SayHelloClientStreaming:output_type -> greet_service.MessagesList
-	2, // 7: greet_service.GreetService.SayHelloBidirectionalStreaming:output_type -> greet_service.HelloResponse
+	0, // 0: greet_service.GreetService.SayGreeting:input_type -> greet_service.NoPram
+	3, // 1: greet_service.GreetService.SayGreetingServerStreaming:input_type -> greet_service.NamesList
+	1, // 2: greet_service.GreetService.SayGreetingClientStreaming:input_type -> greet_service.GreetingRequest
+	1, // 3: greet_service.GreetService.SayGreetingBidirectionalStreaming:input_type -> greet_service.GreetingRequest
+	2, // 4: greet_service.GreetService.SayGreeting:output_type -> greet_service.GreetingResponse
+	2, // 5: greet_service.GreetService.SayGreetingServerStreaming:output_type -> greet_service.GreetingResponse
+	4, // 6: greet_service.GreetService.SayGreetingClientStreaming:output_type -> greet_service.MessagesList
+	2, // 7: greet_service.GreetService.SayGreetingBidirectionalStreaming:output_type -> greet_service.GreetingResponse
 	4, // [4:8] is the sub-list for method output_type
 	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -342,7 +342,7 @@ func file_proto_greet_proto_init() {
 			}
 		}
 		file_proto_greet_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*HelloRequest); i {
+			switch v := v.(*GreetingRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -354,7 +354,7 @@ func file_proto_greet_proto_init() {
 			}
 		}
 		file_proto_greet_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*HelloResponse); i {
+			switch v := v.(*GreetingResponse); i {
 			case 0:
 				return &v.state
 			case 1:

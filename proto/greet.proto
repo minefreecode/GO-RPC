@@ -7,28 +7,28 @@ package greet_service;
 
 service GreetService {
   //Запрос и ответ
-  rpc SayHello (NoPram) returns (HelloResponse);
+  rpc SayGreeting (NoPram) returns (GreetingResponse);
 
   //Серверная потоковая передача — клиент отправляет запрос и получает поток ответа
-  rpc SayHelloServerStreaming (NamesList) returns (stream HelloResponse);
+  rpc SayGreetingServerStreaming (NamesList) returns (stream GreetingResponse);
 
   //Клиентская потоковая передача — клиент отправляет поток запросов и получает ответ
-  rpc SayHelloClientStreaming (stream HelloRequest) returns (MessagesList);
+  rpc SayGreetingClientStreaming (stream GreetingRequest) returns (MessagesList);
 
   //Двунаправленный — клиент и сервер общаются друг с другом с помощью потока
-  rpc SayHelloBidirectionalStreaming (stream HelloRequest) returns (stream HelloResponse);
+  rpc SayGreetingBidirectionalStreaming (stream GreetingRequest) returns (stream GreetingResponse);
 }
 
 //Сообщение без параметров
 message NoPram{}
 
 // Сообщение необходимое для запроса
-message HelloRequest {
+message GreetingRequest {
   string name = 1;
 }
 
 // Сообщение необходимое для ответа
-message HelloResponse {
+message GreetingResponse {
   string message = 1;
 }
 

@@ -15,22 +15,23 @@ const (
 	port = ":8080"
 )
 
-type helloServer struct {
+// Сервер
+type greetingServer struct {
 	pb.GreetServiceServer
 }
 
-// SayHello Серверный метод куда приходят обращения
-func (s *helloServer) SayHello(ctx context.Context, req *pb.NoPram) (*pb.HelloResponse, error) {
-	return &pb.HelloResponse{
-		Message: "Hello",
+// SayGreeting Серверный метод куда приходят обращения
+func (s *greetingServer) SayGreeting(ctx context.Context, req *pb.NoPram) (*pb.GreetingResponse, error) {
+	return &pb.GreetingResponse{
+		Message: "Greeting",
 	}, nil
 }
 
-func (s *helloServer) SayHelloServerStreaming(req *pb.NamesList, stream pb.GreetService_SayHelloServerStreamingServer) error {
+func (s *greetingServer) SayGreetingServerStreaming(req *pb.NamesList, stream pb.GreetService_SayGreetingServerStreamingServer) error {
 	log.Printf("Получен запрос с именами: %v", req.Names)
 
 	for _, name := range req.Names {
-		res := &pb.HelloResponse{Message: "Hello " + name}
+		res := &pb.GreetingResponse{Message: "Greeting " + name}
 		if err := stream.Send(res); err != nil {
 			return err
 		}
@@ -39,7 +40,7 @@ func (s *helloServer) SayHelloServerStreaming(req *pb.NamesList, stream pb.Greet
 	return nil
 }
 
-func (s *helloServer) SayHelloClientStreaming(stream pb.GreetService_SayHelloClientStreamingServer) error {
+func (s *greetingServer) SayGreetingClientStreaming(stream pb.GreetService_SayGreetingClientStreamingServer) error {
 	var messages []string
 	for {
 		req, err := stream.Recv()
@@ -56,7 +57,7 @@ func (s *helloServer) SayHelloClientStreaming(stream pb.GreetService_SayHelloCli
 	}
 }
 
-func (s *helloServer) SayHelloBidirectionalStreaming(stream pb.GreetService_SayHelloBidirectionalStreamingServer) error {
+func (s *greetingServer) SayGreetingBidirectionalStreaming(stream pb.GreetService_SayGreetingBidirectionalStreamingServer) error {
 	for {
 		req, err := stream.Recv()
 		if err == io.EOF {
@@ -66,8 +67,8 @@ func (s *helloServer) SayHelloBidirectionalStreaming(stream pb.GreetService_SayH
 			return err
 		}
 		log.Printf("Получен запрос с именем: %v", req.Name)
-		res := &pb.HelloResponse{
-			Message: "Hello" + req.Name,
+		res := &pb.GreetingResponse{
+			Message: "Greeting" + req.Name,
 		}
 		log.Printf("Отправка сообщения с именем: %v", res.Message)
 		if err := stream.Send(res); err != nil {
@@ -78,14 +79,14 @@ func (s *helloServer) SayHelloBidirectionalStreaming(stream pb.GreetService_SayH
 }
 
 func main() {
-	lis, err := net.Listen("tcp", port)
+	lis, err := net.Listen("tcp", port) //Запуск прослушки порта
 	if err != nil {
 		log.Fatalf("Ошибка при запуске сервера: %v", err)
 	}
 	grpcServer := grpc.NewServer()
-	pb.RegisterGreetServiceServer(grpcServer, &helloServer{})
+	pb.RegisterGreetServiceServer(grpcServer, &greetingServer{}) //Регистрация сервиса сервера, сгенерированного командой
 	log.Printf("Сервер стартовал: %v", lis.Addr())
-	err = grpcServer.Serve(lis)
+	err = grpcServer.Serve(lis) //Запуск обслуживания по порту
 	if err != nil {
 		log.Fatalf("Ошибка старта сервера: %v", err)
 	}
