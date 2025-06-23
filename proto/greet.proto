@@ -7,7 +7,7 @@ package greet_service;
 
 service GreetService {
   //Запрос и ответ
-  rpc SayHello (NoParam) returns (HelloResponse);
+  rpc SayHello (NoPram) returns (HelloResponse);
 
   //Серверная потоковая передача — клиент отправляет запрос и получает поток ответа
   rpc SayHelloServerStreaming (NamesList) returns (stream HelloResponse);
@@ -20,7 +20,7 @@ service GreetService {
 }
 
 //Сообщение без параметров
-message NoParam{}
+message NoPram{}
 
 // Сообщение необходимое для запроса
 message HelloRequest {

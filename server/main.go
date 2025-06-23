@@ -1,19 +1,41 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net"
+	"time"
 
 	pb "go-rpc/proto"
 	"google.golang.org/grpc"
 )
 
 const (
-	port = ":8000"
+	port = ":8080"
 )
 
 type helloServer struct {
 	pb.GreetServiceServer
+}
+
+// SayHello Серверный метод куда приходят обращения
+func (s *helloServer) SayHello(ctx context.Context, req *pb.NoPram) (*pb.HelloResponse, error) {
+	return &pb.HelloResponse{
+		Message: "Hello",
+	}, nil
+}
+
+func (s *helloServer) SayHelloServerStreaming(req *pb.NamesList, stream pb.GreetService_SayHelloServerStreamingServer) error {
+	log.Printf("Получен запрос с именами: %v", req.Names)
+
+	for _, name := range req.Names {
+		res := &pb.HelloResponse{Message: "Hello " + name}
+		if err := stream.Send(res); err != nil {
+			return err
+		}
+		time.Sleep(2 * time.Second)
+	}
+	return nil
 }
 
 func main() {
