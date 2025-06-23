@@ -45,6 +45,30 @@ func callSayHelloServerStream(client pb.GreetServiceClient, names *pb.NamesList)
 	log.Println("Поток закончен")
 }
 
+func callSayHelloClientStream(client pb.GreetServiceClient, names *pb.NamesList) {
+	log.Printf("Клиентский стримминг начат")
+	stream, err := client.SayHelloClientStreaming(context.Background())
+	if err != nil {
+		log.Fatalf("Нельзя стартовать клиентский стримминг: %v", err)
+	}
+	for _, name := range names.Names {
+		req := &pb.HelloRequest{
+			Name: name,
+		}
+		if err := stream.Send(req); err != nil {
+			log.Fatalf("Ошибка в ходе отправки: %v", err)
+		}
+		log.Printf("Отправлен запрос с именем: %v", name)
+		time.Sleep(2 * time.Second)
+	}
+	res, err := stream.CloseAndRecv()
+	log.Println("Стримминг закончен")
+	if err != nil {
+		log.Fatalf("Ошибка при получении ответа с сервера: %v", err)
+	}
+	log.Printf("%v", res.Messages)
+}
+
 func main() {
 	conn, err := grpc.Dial("localhost"+port, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
@@ -54,9 +78,11 @@ func main() {
 
 	client := pb.NewGreetServiceClient(conn)
 
-	/* names := &pb.NamesList{
+	names := &pb.NamesList{
 		Names: []string{"Alice", "Bob", "King"},
-	} */
+	}
 
-	callSayHello(client)
+	//callSayHello(client)
+	// callSayHelloServerStream(client, names)
+	callSayHelloClientStream(client, names)
 }
